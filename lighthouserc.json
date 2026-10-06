@@ -18,6 +18,6 @@
         "uses-optimized-images": "error"
       }
     },
-    "upload": { "target": "temporary-public-storage" }
+    "upload": { "target": "filesystem", "outputDir": ".lighthouseci" }
   }
 }

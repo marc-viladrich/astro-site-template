@@ -1,0 +1,10 @@
+title: Leistungen
+description: Übersicht der Leistungen der Beispielsite. Platzhalterseite des Templates, beim Anlegen einer Kundensite mit echten Inhalten ersetzen.
+sections:
+  - type: textMedia
+    headline: Leistungen
+    body: |
+      Platzhalter. Hier stehen die Leistungen mit konkretem Nutzen, Ablauf und Preisrahmen.
+  - type: cta
+    headline: Passt das zu Ihrem Vorhaben?
+    button: { label: Anfrage senden, href: /kontakt/ }

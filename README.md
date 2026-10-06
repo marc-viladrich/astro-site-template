@@ -31,7 +31,14 @@ Issue Form (Änderung) ──► Label agent-go (Mensch) ──► agent.yml ─
 
 ## Neue Kundensite anlegen
 
-1. Privates Repo aus diesem Template erzeugen (GitHub „Use this template“ oder `gh repo create <name> --template marc-viladrich/astro-site-template --private`).
+1. Privates Repo anlegen und die Template-Historie übernehmen, damit spätere Template-Updates per Merge ankommen:
+   ```sh
+   gh repo create marc-viladrich/<name>-site --private
+   git clone git@github.com:marc-viladrich/<name>-site.git && cd <name>-site
+   git remote add template git@github.com:marc-viladrich/astro-site-template.git
+   git fetch template && git reset --hard template/main && git push -u origin main
+   ```
+   Template-Updates später: `git fetch template && git merge template/main`.
 2. `src/site.config.ts`, `src/styles/global.css` (Tokens, Fonts self-hosted nach `public/fonts/`), Beispielinhalte in `src/content/` ersetzen, `tests/routes.ts` anpassen.
 3. Repository-Variablen setzen: `SITE_URL`, `PREVIEW_URL`, `MEDIA_HOST`, `PUBLIC_FORM_ENDPOINT`, `CF_PAGES_PROJECT`.
 4. Secrets setzen, siehe unten.

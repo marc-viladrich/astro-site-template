@@ -25,6 +25,8 @@ jobs:
   # --- HOST-SPEZIFISCH: Cloudflare Pages (Direct Upload) ------------------------------
   upload:
     needs: build
+    # Läuft erst, wenn das Pages-Projekt konfiguriert ist (Variable gesetzt). Vorher kein roter Check.
+    if: vars.CF_PAGES_PROJECT != ''
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

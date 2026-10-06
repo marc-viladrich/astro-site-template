@@ -1,0 +1,8 @@
+title: Datenschutz
+description: Datenschutzerklärung der Beispielsite. Platzhalter des Templates, vor Livegang durch die geprüfte Erklärung des Unternehmens ersetzen.
+noindex: true
+sections:
+  - type: textMedia
+    headline: Datenschutzerklärung
+    body: |
+      **Platzhalter.** Verantwortliche Stelle, Hosting (Anbieter, Standort, Logdaten), Kontaktformular (Dienst, Rechtsgrundlage Art. 6 Abs. 1 lit. b/f DSGVO, Speicherdauer), Medienspeicher, Betroffenenrechte. Keine Cookies, kein Tracking.

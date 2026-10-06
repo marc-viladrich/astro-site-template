@@ -1,0 +1,8 @@
+title: Impressum
+description: Anbieterkennzeichnung nach § 5 DDG. Platzhalter des Templates, vor Livegang mit den echten Angaben des Unternehmens ersetzen.
+noindex: true
+sections:
+  - type: textMedia
+    headline: Impressum
+    body: |
+      **Platzhalter.** Angaben gemäß § 5 DDG: Firma, Rechtsform, Anschrift, Vertretungsberechtigte, Kontakt, Registereintrag, USt-IdNr., Verantwortliche*r für den Inhalt.
