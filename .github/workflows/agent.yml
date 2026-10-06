@@ -24,6 +24,8 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Mit eigenem Token braucht es keine Installation der Claude-GitHub-App; Commits/PRs laufen unter dieser Identität.
+          github_token: ${{ secrets.BOT_TOKEN }}
           prompt: |
             Setze den Änderungswunsch aus Issue #${{ github.event.issue.number }} um.
             Lies zuerst AGENTS.md und halte dich an den Agent-Vertrag darin: nur bestehende
