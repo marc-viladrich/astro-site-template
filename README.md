@@ -14,6 +14,10 @@ Issue Form (Änderung) ──► Label agent-go (Mensch) ──► agent.yml ─
 - **Spur B, Agent:** Änderungswünsche werden erst durch das Label `agent-go` freigegeben (Klick 1). Dann baut Claude Code mit dem Subscription-Token einen PR. Niemand außer dem Label-Setzer verbraucht Kontingent.
 - **Gate:** CI (axe, Request-Allowlist, HTML-Hygiene, Lighthouse-Budgets, Link-Check) und Preview-URL am PR. Merge = Freigabe (Klick 2). `main` deployt in Produktion.
 
+Neue Blogposts, Projekte und FAQ werden im PR mit `draft: false` erzeugt. Der offene PR ist der redaktionelle Entwurf, die Branch-Preview zeigt den Inhalt. Nach dem menschlichen Merge veröffentlicht der Produktions-Deploy ihn ohne zweiten Freigabeschritt. Absichtlich mit `draft: true` markierte Inhalte bleiben verborgen. Der Intake-Integrationstest schützt alle drei Inhaltstypen.
+
+Im Template ist der Upload ohne `CF_PAGES_PROJECT` deaktiviert. Bei einer eingerichteten Kundensite den Upload verpflichtend machen und `gates` sowie `upload` auf `main` verlangen. Fehlende Cloudflare-Secrets werden vor dem Upload mit einem Fehler gemeldet. Ein erfolgreicher Build ohne Upload ist keine Veröffentlichung.
+
 ## Struktur
 
 | Pfad | Zweck |
@@ -58,11 +62,11 @@ Seiten sind Listen dieser Typen. Felder und Pflichtangaben stehen in `src/conten
    git fetch template && git reset --hard template/main && git push -u origin main
    ```
    Template-Updates später: `git fetch template && git merge template/main`.
-2. `src/site.config.ts`, `src/styles/global.css` (Tokens, Fonts self-hosted nach `public/fonts/`), Beispielinhalte in `src/content/` ersetzen, `tests/routes.ts` anpassen.
+2. `src/site.config.ts`, `src/styles/global.css` (Tokens, Fonts self-hosted nach `public/fonts/`), Beispielinhalte in `src/content/` ersetzen. Die Tests erfassen alle gebauten HTML-Routen automatisch.
 3. Repository-Variablen setzen: `SITE_URL`, `PREVIEW_URL`, `MEDIA_HOST`, `PUBLIC_FORM_ENDPOINT`, `CF_PAGES_PROJECT`.
 4. Secrets setzen, siehe unten.
 5. Labels anlegen: `content:blogpost`, `content:projekt`, `content:faq`, `aenderungswunsch`, `agent-go`, `content`.
-6. Branch-Schutz auf `main`: PR erforderlich, ein Review, Status-Checks `gates` und `upload`, keine Ausnahmen für Admins. Braucht GitHub Pro bei privaten Repos.
+6. Branch-Schutz auf `main`: PR erforderlich, Status-Checks `gates` und `upload`, keine Ausnahmen für Admins. Ein Pflichtreview erst mit eigener Bot-Identität; bei PRs aus dem eigenen Account vorerst 0 erforderliche Reviews. Braucht GitHub Pro bei privaten Repos.
 7. Kund*innen als Collaborators einladen (Rolle „Triage“ reicht zum Erstellen von Issues, nicht zum Setzen von `agent-go`).
 
 ## Secrets
@@ -70,11 +74,13 @@ Seiten sind Listen dieser Typen. Felder und Pflichtangaben stehen in `src/conten
 | Secret | Wofür | Woher |
 |---|---|---|
 | `CLAUDE_CODE_OAUTH_TOKEN` | Spur B, Subscription-Auth | lokal `claude setup-token` (Pro/Max). Läuft auf das Kontingent des Erzeugers |
-| `BOT_TOKEN` | Intake-PRs unter Bot-Identität, damit CI läuft und der Mensch approven kann | Fine-grained PAT eines separaten Bot-Accounts oder GitHub App; Rechte: Contents + Pull requests write |
+| `BOT_TOKEN` | Intake-PRs unter Bot-Identität, damit CI läuft und der Mensch approven kann | Prototyp: eigener PAT; für Pflichtreviews GitHub-App-Installationstoken oder separater Account. Rechte: Contents, Pull requests und Issues write |
 | `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | Deploy (nur bei Cloudflare Pages) | Dashboard → Profil → API-Tokens → Custom Token mit Account-Permission „Cloudflare Pages: Edit“; Account-ID aus `wrangler whoami` |
 | `BREVO_API_KEY`, `CONTACT_TO`, `CONTACT_FROM` | Mailversand des Kontaktformulars (Pages-Function-Secrets, nicht GitHub) | `wrangler pages secret put BREVO_API_KEY --project-name <name>`; ohne diese Werte antwortet das Formular ehrlich mit „nicht konfiguriert“ und speichert nichts |
 
-**Warum `BOT_TOKEN`?** PRs, die ein Workflow mit dem eingebauten `GITHUB_TOKEN` öffnet, lösen absichtlich keine weiteren Workflows aus (Loop-Schutz von GitHub). Die Intake-PRs hätten also keine CI und keine Preview. Mit einem persönlichen Token laufen sie. Für den Prototyp reicht ein Token des eigenen Accounts; eine separate Bot-Identität braucht man erst, wenn Branch Protection ein fremdes Review verlangt (eigene PRs kann man nicht approven).
+**Warum `BOT_TOKEN`?** Mit einem eigenen Token starten die PR-Workflows automatisch. Der eingebaute `GITHUB_TOKEN` kann bei bestimmten PR-Ereignissen ebenfalls Workflows erzeugen, verlangt aber eine zusätzliche Freigabe. Ein Token aus Marcs Account genügt für den Prototyp. Ein weiterer Token desselben Accounts ändert die Identität nicht. Eine eigenständige GitHub-App kann PRs als Bot öffnen, die Marc dann offiziell genehmigen kann. [GitHub-Workflow-Regeln](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow#triggering-a-workflow-from-a-workflow).
+
+Vor dem Claude-Start prüft der Workflow Schreibrechte des ursprünglichen und gegebenenfalls erneuten Auslösers. Die Claude-Action ist auf einen Commit festgelegt. Vor dem PR wird der Diff mit einem Prüfer aus dem Start-Commit auf erlaubte Dateipfade kontrolliert. Diese Prüfungen begrenzen Fehler und unerlaubte Änderungen; der ausführende Agent-Prozess braucht weiterhin seine Credentials und ist dadurch kein vom Secret isolierter Sandbox-Prozess. Ein kompromittierter Agent-Prozess kann die ihm zur Laufzeit bereitgestellten Secrets weiterhin lesen.
 
 ## Kontaktformular
 
@@ -91,7 +97,7 @@ Nur `deploy.yml` kennt den Host. Der Job `build` erzeugt ein Artefakt `dist/`, d
 - **Dokploy/Coolify auf Hetzner:** Webhook-Trigger oder `rsync` des Artefakts; PR-Previews übernimmt Dokploy.
 - **Beliebiger EU-Host per rsync:** `rsync -az --delete dist/ user@host:/srv/sites/<name>/<branch>/` plus Wildcard-Subdomain mit Basic Auth. Ca. ein Tag Eigenbau.
 
-Alles andere (Build, Gates, Intake, Agent) bleibt unverändert, weil die Site keine Host-Features nutzt: keine Functions, keine Edge-Middleware, Formular geht an einen externen EU-Dienst.
+Build, Gates, Intake und Agent bleiben erhalten. Das Formular nutzt aktuell eine Pages Function; beim Hostwechsel muss diese mit umziehen oder `PUBLIC_FORM_ENDPOINT` auf einen externen Endpunkt zeigen.
 
 ## Medien
 
