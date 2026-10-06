@@ -52,7 +52,16 @@ Issue Form (Änderung) ──► Label agent-go (Mensch) ──► agent.yml ─
 |---|---|---|
 | `CLAUDE_CODE_OAUTH_TOKEN` | Spur B, Subscription-Auth | lokal `claude setup-token` (Pro/Max). Läuft auf das Kontingent des Erzeugers |
 | `BOT_TOKEN` | Intake-PRs unter Bot-Identität, damit CI läuft und der Mensch approven kann | Fine-grained PAT eines separaten Bot-Accounts oder GitHub App; Rechte: Contents + Pull requests write |
-| `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | Deploy (nur bei Cloudflare Pages) | Cloudflare Dashboard, Token mit „Pages: Edit“ |
+| `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | Deploy (nur bei Cloudflare Pages) | Dashboard → Profil → API-Tokens → Custom Token mit Account-Permission „Cloudflare Pages: Edit“; Account-ID aus `wrangler whoami` |
+| `BREVO_API_KEY`, `CONTACT_TO`, `CONTACT_FROM` | Mailversand des Kontaktformulars (Pages-Function-Secrets, nicht GitHub) | `wrangler pages secret put BREVO_API_KEY --project-name <name>`; ohne diese Werte antwortet das Formular ehrlich mit „nicht konfiguriert“ und speichert nichts |
+
+**Warum `BOT_TOKEN`?** PRs, die ein Workflow mit dem eingebauten `GITHUB_TOKEN` öffnet, lösen absichtlich keine weiteren Workflows aus (Loop-Schutz von GitHub). Die Intake-PRs hätten also keine CI und keine Preview. Mit einem persönlichen Token laufen sie. Für den Prototyp reicht ein Token des eigenen Accounts; eine separate Bot-Identität braucht man erst, wenn Branch Protection ein fremdes Review verlangt (eigene PRs kann man nicht approven).
+
+## Kontaktformular
+
+`src/components/sections/ContactForm.astro` postet ohne JavaScript an `site.formEndpoint`, standardmäßig `/api/contact`. Dahinter liegt `functions/api/contact.ts`, eine Cloudflare Pages Function nur aus Web-Standard-APIs (Request, FormData, fetch): validiert, prüft Honeypot und optional Turnstile, sendet per Brevo, speichert nichts, leitet auf `/danke/` weiter. Lokal testen mit `npx wrangler pages dev dist`.
+
+Hot-Swap: Entweder die Function auf eine andere Runtime kopieren (Deno, Node, EU-Worker) und `PUBLIC_FORM_ENDPOINT` auf deren URL setzen, oder einen externen Dienst eintragen (EU-Kandidat laut Recherche: Form.taxi). Das Formular-HTML bleibt gleich.
 
 ## Hosting wechseln
 

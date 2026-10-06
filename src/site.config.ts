@@ -16,6 +16,7 @@ export const site = {
       { label: 'Datenschutz', href: '/datenschutz/' },
     ],
   },
-  // Externer Formular-Endpoint (EU-Dienst). Leer = Formular zeigt Hinweis statt zu senden.
-  formEndpoint: import.meta.env.PUBLIC_FORM_ENDPOINT ?? '',
+  // Formular-Endpoint. Default: Pages Function unter /api/contact (functions/api/contact.ts).
+  // Für einen externen Dienst PUBLIC_FORM_ENDPOINT auf dessen URL setzen; das HTML bleibt gleich.
+  formEndpoint: import.meta.env.PUBLIC_FORM_ENDPOINT || '/api/contact',
 } as const;

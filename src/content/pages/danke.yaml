@@ -1,0 +1,8 @@
+title: Danke
+description: Bestätigungsseite nach dem Absenden des Kontaktformulars. Die Anfrage ist eingegangen, eine Antwort folgt per E-Mail innerhalb eines Werktags.
+noindex: true
+sections:
+  - type: textMedia
+    headline: Danke, die Anfrage ist angekommen.
+    body: |
+      Wir melden uns in der Regel innerhalb eines Werktags per E-Mail.
