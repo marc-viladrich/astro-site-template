@@ -10,6 +10,10 @@ permissions:
   contents: write
   issues: write
   pull-requests: write
+# Ein Lauf pro Issue; doppelte Label-Events warten statt zu kollidieren.
+concurrency:
+  group: intake-${{ github.event.issue.number }}
+  cancel-in-progress: false
 jobs:
   intake:
     if: >-
@@ -47,6 +51,12 @@ jobs:
           git config user.name "content-intake[bot]"
           git config user.email "content-intake@users.noreply.github.com"
           BR="content/issue-$N"
+          # Idempotent: existiert Branch oder PR schon, nur melden statt scheitern.
+          if git ls-remote --exit-code --heads origin "$BR" >/dev/null 2>&1; then
+            PR=$(gh pr list --head "$BR" --json url --jq '.[0].url')
+            gh issue comment "$N" --body "Für dieses Issue gibt es bereits einen Branch \`$BR\`${PR:+ und einen PR: $PR}. Kein zweiter Lauf nötig."
+            exit 0
+          fi
           git checkout -b "$BR"
           git add "$FILE"
           git commit -m "content: $TITLE (#$N)"
