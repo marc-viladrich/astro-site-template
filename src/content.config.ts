@@ -55,6 +55,73 @@ export const sectionSchema = z.discriminatedUnion('type', [
     limit: z.number().int().positive().default(6),
   }),
   z.object({
+    type: z.literal('pricing'),
+    headline: z.string().min(1),
+    text: z.string().optional(),
+    tiers: z.array(z.object({
+      name: z.string().min(1),
+      price: z.string().min(1).describe('Freitext inkl. Währung, z. B. "ab 7.900 €"'),
+      unit: z.string().optional().describe('Bezugsgröße zum Preis, z. B. "pro Show" oder "netto"'),
+      description: z.string().optional(),
+      features: z.array(z.string().min(1)).default([]),
+      highlight: z.boolean().default(false).describe('Hebt die Karte als Empfehlung hervor'),
+      cta: link.optional(),
+    })).min(1),
+    note: z.string().optional().describe('Kleingedrucktes unter den Karten'),
+  }),
+  z.object({
+    type: z.literal('steps'),
+    headline: z.string().min(1),
+    text: z.string().optional(),
+    steps: z.array(z.object({
+      title: z.string().min(1),
+      text: z.string().min(1),
+      duration: z.string().optional().describe('Kurzer Zeitrahmen, z. B. "48 h Antwortzeit"'),
+    })).min(2),
+  }),
+  z.object({
+    type: z.literal('comparison'),
+    headline: z.string().min(1),
+    text: z.string().optional(),
+    rowHeader: z.string().default('Kriterium').describe('Beschriftung der ersten Spalte'),
+    columns: z.array(z.string().min(1)).min(2),
+    rows: z.array(z.object({
+      label: z.string().min(1),
+      values: z.array(z.string()).describe('Genau ein Wert je Spalte, in derselben Reihenfolge'),
+    })).min(1),
+    note: z.string().optional(),
+  }).superRefine((s, ctx) => {
+    s.rows.forEach((row, i) => {
+      if (row.values.length !== s.columns.length) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['rows', i, 'values'],
+          message: `Zeile "${row.label}" hat ${row.values.length} Werte, erwartet sind ${s.columns.length} (eine je Spalte).`,
+        });
+      }
+    });
+  }),
+  z.object({
+    type: z.literal('team'),
+    headline: z.string().min(1),
+    text: z.string().optional(),
+    members: z.array(z.object({
+      name: z.string().min(1),
+      role: z.string().min(1),
+      image: image.optional().describe('Ohne Bild erscheint ein Platzhalter mit Initialen'),
+      bio: z.string().optional(),
+    })).min(1),
+  }),
+  z.object({
+    type: z.literal('logoBar'),
+    headline: z.string().optional(),
+    logos: z.array(z.object({
+      name: z.string().min(1),
+      image: image.optional().describe('Ohne Bild wird der Name als Text gesetzt'),
+      href: z.string().min(1).optional(),
+    })).min(1),
+  }),
+  z.object({
     type: z.literal('contactForm'),
     headline: z.string().min(1),
     text: z.string().optional(),
