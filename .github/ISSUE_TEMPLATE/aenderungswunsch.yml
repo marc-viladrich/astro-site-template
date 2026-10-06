@@ -1,0 +1,24 @@
+name: Änderungswunsch (Agent)
+description: Alles, was kein neuer Inhalt ist. Wird von Marc geprüft, dann baut ein Agent einen Vorschlag.
+title: "Änderung: "
+labels: ["aenderungswunsch"]
+body:
+  - type: markdown
+    attributes:
+      value: "Beschreibe, was sich ändern soll und warum. Es entsteht erst ein Vorschlag mit Vorschau, nichts geht automatisch live."
+  - type: dropdown
+    id: page
+    attributes:
+      label: Seite
+      options: [Startseite, Kontakt, Projekte, Blog, FAQ, Andere / mehrere]
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes: { label: Was soll sich ändern, placeholder: "Konkret: welcher Abschnitt, welcher Text, welches Bild." }
+    validations: { required: true }
+  - type: textarea
+    id: why
+    attributes: { label: Warum, description: "Hilft bei der Umsetzung und bei Rückfragen." }
+  - type: textarea
+    id: refs
+    attributes: { label: Material, description: "Links zu Bildern im Medienspeicher, Beispielen, Texten. Screenshots können direkt hier hineingezogen werden." }

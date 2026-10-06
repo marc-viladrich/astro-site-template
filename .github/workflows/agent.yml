@@ -1,0 +1,40 @@
+name: Agent (Spur B)
+# Zwei-Klick-Modell, Klick 1: Marc setzt Label `agent-go` auf ein Issue mit Änderungswunsch.
+# Erst dann läuft Claude Code, mit Marcs Subscription-Token (CLAUDE_CODE_OAUTH_TOKEN aus `claude setup-token`).
+# Guard: nur Nutzer mit Schreibrecht können Labels setzen; die Action prüft den Actor zusätzlich.
+on:
+  issues:
+    types: [labeled]
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
+concurrency:
+  group: agent
+  cancel-in-progress: false
+jobs:
+  build:
+    if: github.event.label.name == 'agent-go'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+        with: { fetch-depth: 1 }
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Setze den Änderungswunsch aus Issue #${{ github.event.issue.number }} um.
+            Lies zuerst AGENTS.md und halte dich an den Agent-Vertrag darin: nur bestehende
+            Section-Typen verwenden, keine neuen Abhängigkeiten, keine Änderungen an
+            .github/, scripts/, tests/ oder AGENTS.md. Wenn der Wunsch einen neuen
+            Section-Typ erfordert, baue ihn NICHT, sondern beschreibe im PR, was fehlt.
+            Arbeite auf einem Branch `agent/issue-${{ github.event.issue.number }}`,
+            führe `npx astro check` und `npx astro build` aus, und öffne einen PR mit
+            Titel "Agent: <kurz>" und Body, der auf Issue #${{ github.event.issue.number }}
+            verweist (Closes #${{ github.event.issue.number }}) und die geänderten
+            Dateien erklärt.
+          claude_args: >-
+            --max-turns 40
+            --allowedTools "Bash(npm ci),Bash(npx astro check),Bash(npx astro build),Bash(git:*),Bash(gh pr create:*),Read,Edit,Write,Glob,Grep"

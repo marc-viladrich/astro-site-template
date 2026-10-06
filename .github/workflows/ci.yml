@@ -1,0 +1,50 @@
+name: CI
+# Qualitäts-Gates für jeden PR. Alles hier ist host-unabhängig.
+on:
+  pull_request:
+  push:
+    branches: [main]
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - name: Typen und Schema (astro check)
+        run: npx astro check
+      - name: Intake-Skript-Tests
+        run: node --test 'scripts/*.test.mjs'
+      - name: Build
+        run: npx astro build
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://example.invalid' }}
+          MEDIA_HOST: ${{ vars.MEDIA_HOST || 'media.example.invalid' }}
+          PUBLIC_FORM_ENDPOINT: ${{ vars.PUBLIC_FORM_ENDPOINT }}
+      - name: Playwright (axe, Request-Allowlist, HTML-Hygiene)
+        run: |
+          npx playwright install --with-deps chromium
+          npx playwright test
+        env:
+          CI: 'true'
+          MEDIA_HOST: ${{ vars.MEDIA_HOST }}
+      - name: Interne Links (lychee)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --root-dir "${{ github.workspace }}/dist" --include-fragments "dist/**/*.html"
+          fail: true
+      - name: Lighthouse-Budgets
+        run: |
+          npm i -g @lhci/cli@0.15.x
+          lhci autorun
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

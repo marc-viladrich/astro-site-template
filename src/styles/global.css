@@ -1,0 +1,74 @@
+/* Design-Tokens. Pro Kundensite anpassen. Keine externen Fonts: Schriften gehören
+   self-hosted nach public/fonts/ und werden hier per @font-face eingebunden. */
+:root {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-bg: #faf9f6;
+  --color-surface: #f1efe9;
+  --color-text: #1f2421;
+  --color-muted: #5b625d;
+  --color-accent: #2f5d50;
+  --color-accent-contrast: #ffffff;
+  --measure: 40rem;
+  --space-section: clamp(4rem, 10vw, 8rem);
+  --space-inner: clamp(1.25rem, 3vw, 2rem);
+  --radius: 0.5rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { font-family: var(--font-sans); color: var(--color-text); background: var(--color-bg); line-height: 1.55; -webkit-text-size-adjust: 100%; }
+body { margin: 0; font-size: clamp(1.0625rem, 0.3vw + 1rem, 1.25rem); }
+img, video { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+h1, h2, h3 { line-height: 1.15; text-wrap: balance; margin: 0 0 0.6em; }
+h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 650; }
+h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 600; }
+h3 { font-size: 1.25rem; font-weight: 600; }
+p { margin: 0 0 1em; text-wrap: pretty; }
+.measure { max-width: var(--measure); }
+.wrap { width: min(100% - 2 * var(--space-inner), 72rem); margin-inline: auto; }
+.section { padding-block: var(--space-section); }
+.section--band { background: var(--color-surface); }
+.muted { color: var(--color-muted); }
+
+.skip { position: absolute; left: 1rem; top: -4rem; background: var(--color-text); color: var(--color-bg); padding: 0.5rem 1rem; border-radius: var(--radius); z-index: 10; }
+.skip:focus { top: 1rem; }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+
+.btn { display: inline-block; padding: 0.8em 1.4em; border-radius: var(--radius); background: var(--color-accent); color: var(--color-accent-contrast); text-decoration: none; font-weight: 600; border: 2px solid var(--color-accent); }
+.btn--ghost { background: transparent; color: var(--color-text); border-color: currentColor; }
+.btn:hover { filter: brightness(0.92); }
+
+.nav { display: flex; align-items: center; gap: var(--space-inner); padding-block: 1.25rem; flex-wrap: wrap; }
+.nav__brand { font-weight: 700; text-decoration: none; margin-right: auto; }
+.nav ul { list-style: none; display: flex; gap: 1.25rem; margin: 0; padding: 0; flex-wrap: wrap; }
+.nav a { text-decoration: none; }
+.nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 0.3em; }
+
+.footer { padding-block: 3rem; color: var(--color-muted); font-size: 0.95rem; }
+.footer ul { list-style: none; display: flex; gap: 1.25rem; padding: 0; margin: 0 0 1rem; flex-wrap: wrap; }
+
+.grid-2 { display: grid; gap: var(--space-inner); align-items: center; }
+@media (min-width: 48rem) { .grid-2 { grid-template-columns: 1fr 1fr; } .grid-2--media-left > :first-child { order: 2; } }
+.cards { display: grid; gap: var(--space-inner); grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
+.card { background: var(--color-surface); border-radius: var(--radius); padding: var(--space-inner); }
+.card h3 a { text-decoration: none; }
+.card h3 a:hover { text-decoration: underline; }
+
+details { border-top: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent); padding-block: 1rem; }
+details:last-of-type { border-bottom: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent); }
+summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-weight: 400; }
+details[open] summary::after { content: "–"; }
+
+.form { display: grid; gap: 1rem; max-width: var(--measure); }
+.form label { display: grid; gap: 0.35rem; font-weight: 600; }
+.form input, .form textarea, .form select { font: inherit; padding: 0.7em 0.9em; border: 1px solid var(--color-muted); border-radius: var(--radius); background: #fff; color: inherit; }
+.form .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.form small { font-weight: 400; color: var(--color-muted); }
+
+.prose { max-width: var(--measure); }
+.prose img { border-radius: var(--radius); }
+.prose h2 { margin-top: 2em; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

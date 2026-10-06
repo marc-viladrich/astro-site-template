@@ -1,0 +1,6 @@
+title: Kontakt
+description: Kontaktformular der Beispielsite. Anfragen werden an einen externen Formular-Endpoint in der EU gesendet, nicht gespeichert.
+sections:
+  - type: contactForm
+    headline: Anfrage senden
+    text: Drei Felder, keine Pflicht zur Telefonnummer. Antwort kommt per E-Mail.

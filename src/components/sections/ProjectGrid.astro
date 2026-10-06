@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import Picture from '../Picture.astro';
+import type { Section } from '../../content.config';
+type Props = Extract<Section, { type: 'projectGrid' }> & { index: number };
+const { headline = 'Projekte', limit, index } = Astro.props;
+const id = `s${index}-h`;
+const H = index === 0 ? 'h1' : 'h2';
+const projects = (await getCollection('projects', (p) => !p.data.draft))
+  .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, limit);
+---
+<section class="section section--band" aria-labelledby={id}>
+  <div class="wrap">
+    <H id={id}>{headline}</H>
+    <div class="cards">
+      {projects.map((p) => (
+        <article class="card">
+          {p.data.cover && <Picture {...p.data.cover} sizes="(min-width: 48rem) 33vw, 100vw" />}
+          <h3><a href={`/projekte/${p.id}/`}>{p.data.title}</a></h3>
+          <p class="muted">{[p.data.client, p.data.location].filter(Boolean).join(' · ')}</p>
+          <p>{p.data.summary}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

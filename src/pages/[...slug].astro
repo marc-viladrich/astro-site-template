@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import SectionRenderer from '../components/SectionRenderer.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  return pages.map((p) => ({ params: { slug: p.id === 'index' ? undefined : p.id }, props: { page: p } }));
+}
+const { page } = Astro.props;
+---
+<Base title={page.data.title} description={page.data.description} noindex={page.data.noindex}>
+  <SectionRenderer sections={page.data.sections} />
+</Base>

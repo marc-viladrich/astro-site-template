@@ -1,0 +1,17 @@
+---
+// Einzige Zuordnung Section-Typ → Komponente. Neue Typen: Schema in content.config.ts,
+// Komponente in sections/, eine Zeile hier. Mehr nicht.
+import type { Section } from '../content.config';
+import Hero from './sections/Hero.astro';
+import TextMedia from './sections/TextMedia.astro';
+import Faq from './sections/Faq.astro';
+import Cta from './sections/Cta.astro';
+import PostList from './sections/PostList.astro';
+import ProjectGrid from './sections/ProjectGrid.astro';
+import ContactForm from './sections/ContactForm.astro';
+
+interface Props { sections: Section[] }
+const { sections } = Astro.props;
+const map = { hero: Hero, textMedia: TextMedia, faq: Faq, cta: Cta, postList: PostList, projectGrid: ProjectGrid, contactForm: ContactForm } as const;
+---
+{sections.map((s, i) => { const C = map[s.type]; return <C {...(s as any)} index={i} />; })}

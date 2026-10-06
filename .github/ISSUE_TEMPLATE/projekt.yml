@@ -1,0 +1,31 @@
+name: Projekt / Referenz einreichen
+description: Neues Projekt für die Projektübersicht.
+title: "Projekt: "
+labels: ["content:projekt"]
+body:
+  - type: input
+    id: title
+    attributes: { label: Titel }
+    validations: { required: true }
+  - type: input
+    id: client
+    attributes: { label: Kunde, description: "Leer lassen, wenn nicht genannt werden darf." }
+  - type: input
+    id: date
+    attributes: { label: Datum, description: "Format JJJJ-MM-TT.", placeholder: "2026-09-01" }
+  - type: input
+    id: location
+    attributes: { label: Ort }
+  - type: textarea
+    id: summary
+    attributes: { label: Kurzbeschreibung, description: "30 bis 200 Zeichen, erscheint in Karten." }
+    validations: { required: true }
+  - type: checkboxes
+    id: featured
+    attributes:
+      label: Hervorheben
+      options:
+        - label: Auf der Startseite zeigen
+  - type: textarea
+    id: body
+    attributes: { label: Text, description: "Ausführliche Beschreibung. Markdown erlaubt." }

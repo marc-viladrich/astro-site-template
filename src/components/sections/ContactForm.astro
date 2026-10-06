@@ -1,0 +1,29 @@
+---
+// Formular postet an einen externen EU-Dienst (PUBLIC_FORM_ENDPOINT). Kein JS nötig.
+// Honeypot-Feld "website" muss leer bleiben. Felder pro Kundensite anpassen.
+import { site } from '../../site.config';
+import type { Section } from '../../content.config';
+type Props = Extract<Section, { type: 'contactForm' }> & { index: number };
+const { headline, text, index } = Astro.props;
+const id = `s${index}-h`;
+const H = index === 0 ? 'h1' : 'h2';
+const endpoint = site.formEndpoint;
+---
+<section class="section" aria-labelledby={id}>
+  <div class="wrap">
+    <H id={id}>{headline}</H>
+    {text && <p class="muted measure">{text}</p>}
+    {endpoint ? (
+      <form class="form" method="post" action={endpoint} accept-charset="UTF-8">
+        <label>Name <input name="name" type="text" required autocomplete="name" /></label>
+        <label>E-Mail <input name="email" type="email" required autocomplete="email" /></label>
+        <label>Nachricht <textarea name="message" rows="6" required></textarea></label>
+        <label class="hp" aria-hidden="true">Website <input name="website" type="text" tabindex="-1" autocomplete="off" /></label>
+        <p><small>Mit dem Absenden werden die Angaben zur Bearbeitung der Anfrage verarbeitet. Details in der <a href="/datenschutz/">Datenschutzerklärung</a>.</small></p>
+        <p><button class="btn" type="submit">Anfrage senden</button></p>
+      </form>
+    ) : (
+      <p class="measure"><strong>Formular-Endpoint nicht konfiguriert.</strong> <code>PUBLIC_FORM_ENDPOINT</code> setzen.</p>
+    )}
+  </div>
+</section>

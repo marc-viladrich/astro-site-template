@@ -1,0 +1,21 @@
+---
+import Picture from '../Picture.astro';
+import type { Section } from '../../content.config';
+type Props = Extract<Section, { type: 'hero' }>;
+const { headline, text, image, cta, secondary } = Astro.props;
+---
+<section class="section" aria-labelledby="hero-h">
+  <div class:list={['wrap', { 'grid-2': image }]}>
+    <div class="measure">
+      <h1 id="hero-h">{headline}</h1>
+      {text && <p class="muted">{text}</p>}
+      {(cta || secondary) && (
+        <p>
+          {cta && <a class="btn" href={cta.href}>{cta.label}</a>}
+          {secondary && <a class="btn btn--ghost" href={secondary.href} style="margin-left:.75rem">{secondary.label}</a>}
+        </p>
+      )}
+    </div>
+    {image && <Picture {...image} loading="eager" sizes="(min-width: 48rem) 50vw, 100vw" />}
+  </div>
+</section>

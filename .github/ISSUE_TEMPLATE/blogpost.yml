@@ -1,0 +1,26 @@
+name: Blogbeitrag einreichen
+description: Neuer Beitrag für den Blog. Wird automatisch als Entwurf angelegt und zur Freigabe vorgelegt.
+title: "Blog: "
+labels: ["content:blogpost"]
+body:
+  - type: markdown
+    attributes:
+      value: "Alle Felder mit * sind Pflicht. Nach dem Absenden entsteht automatisch eine Vorschau. Veröffentlicht wird erst nach Freigabe."
+  - type: input
+    id: title
+    attributes: { label: Titel, placeholder: "Klar und konkret, max. 70 Zeichen" }
+    validations: { required: true }
+  - type: textarea
+    id: description
+    attributes: { label: Beschreibung, description: "Erscheint in Google und in Übersichten. 50 bis 160 Zeichen.", placeholder: "Worum geht es, für wen, was hat man davon?" }
+    validations: { required: true }
+  - type: input
+    id: date
+    attributes: { label: Datum, description: "Format JJJJ-MM-TT. Leer = heute.", placeholder: "2026-10-06" }
+  - type: input
+    id: tags
+    attributes: { label: Schlagworte, description: "Kommagetrennt.", placeholder: "Hochzeit, Technik" }
+  - type: textarea
+    id: body
+    attributes: { label: Text, description: "Der Beitrag selbst. Markdown erlaubt (## Zwischenüberschrift, **fett**, Listen mit -). Bilder bitte als Link auf den Medienspeicher." }
+    validations: { required: true }

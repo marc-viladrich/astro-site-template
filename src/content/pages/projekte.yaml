@@ -1,0 +1,6 @@
+title: Projekte
+description: Übersicht aller Projekte und Referenzen der Beispielsite, sortiert nach Hervorhebung und Datum, neueste zuerst.
+sections:
+  - type: projectGrid
+    headline: Projekte
+    limit: 50

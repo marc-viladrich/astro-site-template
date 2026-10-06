@@ -1,0 +1,28 @@
+title: Startseite
+description: Beispiel-Startseite des Templates. Zeigt alle Section-Typen einmal, damit Build und Tests etwas zu prüfen haben.
+sections:
+  - type: hero
+    headline: Ein Satz, der sagt, was wir tun.
+    text: Ein zweiter Satz, der sagt, für wen und mit welchem Ergebnis.
+    cta: { label: Anfragen, href: /kontakt/ }
+    secondary: { label: Projekte ansehen, href: /projekte/ }
+  - type: textMedia
+    headline: Warum das hier anders ist
+    body: |
+      Zwei bis drei Absätze **Markdown**. Konkrete Aussagen statt Behauptungen.
+
+      - Erster belegbarer Punkt
+      - Zweiter belegbarer Punkt
+  - type: projectGrid
+    headline: Ausgewählte Projekte
+    limit: 3
+  - type: faq
+    headline: Häufige Fragen
+    limit: 5
+  - type: postList
+    headline: Aktuelles
+    limit: 3
+  - type: cta
+    headline: Bereit für ein Gespräch?
+    text: Unverbindlich, in der Regel Antwort innerhalb eines Werktags.
+    button: { label: Anfrage senden, href: /kontakt/ }
