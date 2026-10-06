@@ -29,6 +29,25 @@ Issue Form (Änderung) ──► Label agent-go (Mensch) ──► agent.yml ─
 | `.github/workflows/` | `ci.yml` (Gates), `content-intake.yml` (Spur A), `agent.yml` (Spur B), `deploy.yml` (host-spezifisch) |
 | `AGENTS.md` | Agent-Vertrag, gilt für Claude Code und Codex |
 
+## Section-Typen
+
+Seiten sind Listen dieser Typen. Felder und Pflichtangaben stehen in `src/content.config.ts`, ein Beispiel für jeden neuen Typ in `src/content/pages/leistungen.yaml`.
+
+| Typ | Zweck |
+|---|---|
+| `hero` | Einstieg der Seite mit Headline, Text, Bild und bis zu zwei Links. |
+| `textMedia` | Fließtext (Markdown) mit optionalem Bild links oder rechts. |
+| `faq` | Akkordeon aus der Collection `faq`, optional nach Tags gefiltert. |
+| `cta` | Handlungsaufforderung mit Headline, Text und einem Button. |
+| `postList` | Die neuesten Beiträge aus der Collection `posts`. |
+| `projectGrid` | Kartenraster aus der Collection `projects`. |
+| `contactForm` | Kontaktformular, das an `PUBLIC_FORM_ENDPOINT` postet. |
+| `pricing` | Preiskarten mit Merkmalen, Preis, Bezugsgröße und Link; eine Karte lässt sich als Empfehlung hervorheben. |
+| `steps` | Nummerierte Ablaufschritte mit Titel, Text und optionalem Zeitrahmen; mobil untereinander, ab 48rem als Raster. |
+| `comparison` | Vergleichstabelle (echte `<table>` mit Caption, mobil horizontal scrollbar); jede Zeile braucht genau einen Wert je Spalte, sonst bricht der Build. |
+| `team` | Karten mit Name, Rolle und Kurztext; ohne Bild erscheint ein Platzhalterkreis mit Initialen. |
+| `logoBar` | Gedämpfte Reihe von Referenzlogos (ohne Animation); ohne Bild wird der Name als Text gesetzt, mit `href` ist er verlinkt. |
+
 ## Neue Kundensite anlegen
 
 1. Privates Repo anlegen und die Template-Historie übernehmen, damit spätere Template-Updates per Merge ankommen:

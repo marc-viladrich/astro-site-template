@@ -1,0 +1,33 @@
+---
+import type { Section } from '../../content.config';
+type Props = Extract<Section, { type: 'pricing' }> & { index: number };
+const { headline, text, tiers, note, index } = Astro.props;
+const id = `s${index}-h`;
+const H = index === 0 ? 'h1' : 'h2';
+---
+<section class="section" aria-labelledby={id}>
+  <div class="wrap">
+    <H id={id}>{headline}</H>
+    {text && <p class="muted measure">{text}</p>}
+    <div class="tiers">
+      {tiers.map((t) => (
+        <article class:list={['tier', { 'tier--highlight': t.highlight }]}>
+          {t.highlight && <p class="tier__badge">Empfohlen</p>}
+          <h3>{t.name}</h3>
+          {t.description && <p class="muted">{t.description}</p>}
+          <p class="tier__price">
+            <strong>{t.price}</strong>
+            {t.unit && <span class="muted"> {t.unit}</span>}
+          </p>
+          {t.features.length > 0 && (
+            <ul class="tier__features" role="list">
+              {t.features.map((f) => <li>{f}</li>)}
+            </ul>
+          )}
+          {t.cta && <p class="tier__cta"><a class:list={['btn', { 'btn--ghost': !t.highlight }]} href={t.cta.href}>{t.cta.label}</a></p>}
+        </article>
+      ))}
+    </div>
+    {note && <p class="muted measure"><small>{note}</small></p>}
+  </div>
+</section>

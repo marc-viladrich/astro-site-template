@@ -1,0 +1,33 @@
+---
+import type { Section } from '../../content.config';
+type Props = Extract<Section, { type: 'comparison' }> & { index: number };
+const { headline, text, rowHeader, columns, rows, note, index } = Astro.props;
+const id = `s${index}-h`;
+const H = index === 0 ? 'h1' : 'h2';
+---
+<section class="section" aria-labelledby={id}>
+  <div class="wrap">
+    <H id={id}>{headline}</H>
+    {text && <p class="muted measure">{text}</p>}
+    <div class="table-wrap" role="region" aria-label={`${headline} (Tabelle, horizontal scrollbar)`} tabindex="0">
+      <table class="compare">
+        <caption class="sr-only">{headline}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{rowHeader}</th>
+            {columns.map((c) => <th scope="col">{c}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr>
+              <th scope="row">{r.label}</th>
+              {r.values.map((v) => <td>{v}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    {note && <p class="muted measure"><small>{note}</small></p>}
+  </div>
+</section>

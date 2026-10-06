@@ -1,0 +1,31 @@
+---
+import Picture from '../Picture.astro';
+import type { Section } from '../../content.config';
+type Props = Extract<Section, { type: 'team' }> & { index: number };
+const { headline, text, members, index } = Astro.props;
+const id = `s${index}-h`;
+const H = index === 0 ? 'h1' : 'h2';
+// Initialen aus erstem und letztem Namensteil, nur für den Platzhalter ohne Bild.
+const initials = (name: string) => {
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0] ?? '') + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase();
+};
+---
+<section class="section section--band" aria-labelledby={id}>
+  <div class="wrap">
+    <H id={id}>{headline}</H>
+    {text && <p class="muted measure">{text}</p>}
+    <div class="team">
+      {members.map((m) => (
+        <article class="member">
+          {m.image
+            ? <Picture {...m.image} class="member__photo" sizes="(min-width: 48rem) 20vw, 40vw" />
+            : <div class="member__photo member__photo--placeholder" aria-hidden="true">{initials(m.name)}</div>}
+          <h3>{m.name}</h3>
+          <p class="muted member__role">{m.role}</p>
+          {m.bio && <p>{m.bio}</p>}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
