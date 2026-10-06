@@ -1,0 +1,22 @@
+---
+import type { Section } from '../../content.config';
+type Props = Extract<Section, { type: 'steps' }> & { index: number };
+const { headline, text, steps, index } = Astro.props;
+const id = `s${index}-h`;
+const H = index === 0 ? 'h1' : 'h2';
+---
+<section class="section section--band" aria-labelledby={id}>
+  <div class="wrap">
+    <H id={id}>{headline}</H>
+    {text && <p class="muted measure">{text}</p>}
+    <ol class="steps" role="list" style={`--steps:${Math.min(steps.length, 5)}`}>
+      {steps.map((s) => (
+        <li class="step">
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+          {s.duration && <p class="step__duration muted">{s.duration}</p>}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
