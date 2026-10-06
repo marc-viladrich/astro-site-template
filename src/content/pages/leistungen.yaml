@@ -1,10 +1,104 @@
 title: Leistungen
-description: Übersicht der Leistungen der Beispielsite. Platzhalterseite des Templates, beim Anlegen einer Kundensite mit echten Inhalten ersetzen.
+description: Pakete, Ablauf und Vergleich der Beispielsite. Platzhalterseite des Templates, beim Anlegen einer Kundensite mit echten Inhalten ersetzen.
 sections:
   - type: textMedia
     headline: Leistungen
     body: |
-      Platzhalter. Hier stehen die Leistungen mit konkretem Nutzen, Ablauf und Preisrahmen.
+      Platzhalter. Diese Seite zeigt jeden Section-Typ für Preise, Ablauf, Vergleich, Team und Referenzen einmal. Die Inhalte sind erfundene Beispieldaten.
+  - type: pricing
+    headline: Drei Pakete
+    text: Alle Preise netto zuzüglich Anfahrt. Jedes Paket lässt sich mit zusätzlichen Drohnen erweitern.
+    tiers:
+      - name: SPARK
+        price: ab 7.900 €
+        unit: für 100 Drohnen
+        description: Einstieg für Hochzeiten, Jubiläen und kleinere Feiern.
+        features:
+          - 100 Drohnen, ca. 10 Minuten Show
+          - Auswahl aus vorgefertigten Formationen
+          - Bis zu vier eigene Elemente, etwa Initialen oder Logo
+          - Standard-Genehmigungsverfahren
+        cta: { label: SPARK anfragen, href: /kontakt/ }
+      - name: HORIZON
+        price: ab 15.900 €
+        unit: für 200 Drohnen
+        description: Individuelle Inszenierung für Produktpräsentationen und große Firmenevents.
+        highlight: true
+        features:
+          - 200 Drohnen, ca. 13 Minuten Show
+          - Individuelle 2D-Animationen und einfache 3D-Elemente
+          - Synchronisation auf die Wunschmusik
+          - Video-Vorschau mit Feedbackschleife
+        cta: { label: HORIZON anfragen, href: /kontakt/ }
+      - name: ODYSSEY
+        price: ab 34.900 €
+        unit: für 300 Drohnen
+        description: Große Kampagnen, Festivals und Events mit maximaler Reichweite.
+        features:
+          - 300 und mehr Drohnen, über 15 Minuten Show
+          - Komplexe 3D-Animationen mit dramaturgischem Aufbau
+          - Eigene Projektleitung
+          - Videodokumentation als Rohmaterial
+        cta: { label: ODYSSEY anfragen, href: /kontakt/ }
+    note: Beispielpreise des Templates. Genehmigung, Sicherheitskonzept und Haftpflichtversicherung sind in jedem Paket enthalten.
+  - type: steps
+    headline: Von der Anfrage bis zur Landung
+    text: Sie sind so viel oder so wenig eingebunden, wie Sie möchten.
+    steps:
+      - title: Anfrage
+        text: Datum, Ort und Anlass genügen. Wir melden uns innerhalb von 48 Stunden.
+        duration: 48 h Antwortzeit
+      - title: Standort und Angebot
+        text: Wir prüfen den Showbereich und senden ein Festpreis-Angebot.
+        duration: Festpreis
+      - title: Genehmigung
+        text: Wir holen die luftrechtlichen Genehmigungen ein. Von Ihnen brauchen wir die Zustimmung der Grundstückseigentümer.
+        duration: 2 bis 6 Wochen
+      - title: Design
+        text: Motive, Ablauf und Musik entstehen gemeinsam, erst als Rohanimation, dann mit Farben und Licht.
+        duration: Entwürfe und Feedback
+      - title: Showtag
+        text: Aufbau, Flug und Abbau übernimmt unser Team vor Ort.
+        duration: ca. 3 h Aufbau
+  - type: comparison
+    headline: Drohnenshow, Feuerwerk oder Lasershow
+    text: Jede Technik hat ihre Stärken. Die Tabelle zeigt, worin sie sich unterscheiden.
+    rowHeader: Kriterium
+    columns: [Drohnenshow, Feuerwerk, Lasershow]
+    rows:
+      - label: Logos und Schriftzüge
+        values: [Ja (auch in 3D), Nein, Teils (nur auf Flächen oder Dunst)]
+      - label: Lautstärke
+        values: [Leise, Sehr laut, Leise]
+      - label: Rauch, Feinstaub und Müll
+        values: [Keine, Viel, Dunst für sichtbare Strahlen]
+      - label: Brandgefahr
+        values: [Keine, Verbote bei Trockenheit, Keine]
+      - label: Wind und Wetter
+        values: [Bis Windstärke 5 und ohne Starkregen, Bei Sturm abgesagt, Robust und auch drinnen]
+    note: Beispielinhalt. Vor dem Veröffentlichen fachlich prüfen.
+  - type: team
+    headline: Das Team
+    text: Design, Technik und Genehmigungen kommen aus einem Haus. Sie haben von der Anfrage bis zur Landung dieselben Ansprechpersonen.
+    members:
+      - name: Anna Beispiel
+        role: Geschäftsführung
+        bio: Kundenkontakt und Design, vom ersten Gespräch bis zum fertigen Konzept.
+      - name: Ben Muster
+        role: Recht und Genehmigungen
+        bio: Spricht mit den Behörden, damit die Show abheben darf.
+      - name: Carla Probe
+        role: Technik
+        bio: Hält Flotte und Ausrüstung startklar.
+  - type: logoBar
+    headline: Geflogen für
+    logos:
+      - { name: Beispiel Automobil }
+      - { name: Muster Sportswear }
+      - { name: Probe Kosmetik }
+      - { name: Stadt Beispielstadt }
+      - { name: Demo Festival }
+      - { name: Platzhalter Energie }
   - type: cta
     headline: Passt das zu Ihrem Vorhaben?
     button: { label: Anfrage senden, href: /kontakt/ }
